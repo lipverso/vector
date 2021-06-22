@@ -1,14 +1,13 @@
 package com.vectorapi.resource;
 
 import java.net.URI;
-import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -21,8 +20,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
 import com.vectorapi.model.Documento;
 import com.vectorapi.repository.DocumentoRepository;
+import com.vectorapi.repository.filter.DocumentoFilter;
 import com.vectorapi.service.DocumentoService;
 
 @RestController
@@ -36,8 +37,8 @@ public class DocumentoResource {
 	private DocumentoService documentoService;
 	
 	@GetMapping
-	public List<Documento> listar(){
-		return documentoRepository.findAll();	
+	public Page<Documento> pesquisar(DocumentoFilter documentoFilter, Pageable pageable){
+		return documentoRepository.filtrar(documentoFilter, pageable);	
 	}
 	
 	@PostMapping
