@@ -1,13 +1,19 @@
 package com.vectorapi.model;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.sun.istack.NotNull;
 
+@JsonIgnoreProperties
 @Entity
 @Table(name = "documento")
 public class Documento {
@@ -17,19 +23,18 @@ public class Documento {
 	private Long id;
 	
 	@NotNull
-	private String data;
-	
-	@NotNull
-	private String codigo;
-	
-	@NotNull
-	private Integer ano;
+	private LocalDateTime data;
 	
 	@NotNull
 	private String resumo;
 	
+	private Integer ano;
+	
 	@NotNull
 	private String solicitante;
+	
+	@Transient
+	private String codigoAno;
 	
 	public Long getId() {
 		return id;
@@ -37,23 +42,17 @@ public class Documento {
 	public void setId(Long id) {
 		this.id = id;
 	}
-	public String getData() {
+	public LocalDateTime getData() {
 		return data;
 	}
-	public void setData(String data) {
+	public void setData(LocalDateTime data) {
 		this.data = data;
 	}
-	public String getCodigo() {
-		return codigo;
-	}
-	public void setCodigo(String codigo) {
-		this.codigo = codigo;
-	}
 	public Integer getAno() {
-		return ano;
+		return this.data.getYear();
 	}
-	public void setAno(Integer ano) {
-		this.ano = ano;
+	public void setAno(LocalDateTime data) {
+		this.ano = data.getYear();
 	}
 	public String getResumo() {
 		return resumo;
@@ -66,6 +65,13 @@ public class Documento {
 	}
 	public void setSolicitante(String solicitante) {
 		this.solicitante = solicitante;
+	}
+	
+	public String getCodigoAno() {
+		return String.format("%05d", this.id) + "/" + this.getAno().toString();
+	}
+	public void setCodigoAno(String codigoAno) {
+		this.codigoAno = codigoAno;
 	}
 	@Override
 	public int hashCode() {
@@ -90,6 +96,8 @@ public class Documento {
 			return false;
 		return true;
 	}
+	
+	
 	
 	
 	
